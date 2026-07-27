@@ -1,0 +1,154 @@
+import java.util.Scanner;
+class Employee {
+    String Emp_Name, Designation, Address, Mail_id;
+    int Emp_id, Mobile_no;
+    double bp, da, hra, gp, pf, staff, np;
+    public void input() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the Employee Name: ");
+        Emp_Name = sc.nextLine();
+        System.out.print("Enter the Employee ID: ");
+        Emp_id = sc.nextInt();
+        sc.nextLine();
+        System.out.print("Enter the Employee Address: ");
+        Address = sc.nextLine();
+        System.out.print("Enter the Employee Mail ID: ");
+        Mail_id = sc.nextLine();
+        System.out.print("Enter the Employee Mobile No: ");
+        Mobile_no = (int) sc.nextLong();
+        System.out.print("Enter the Employee Basic Pay: ");
+        bp = sc.nextDouble();
+    }
+    public void output() {
+        System.out.println("\n----- EMPLOYEE DETAILS -----");
+        System.out.println("Employee Name: " + Emp_Name);
+        System.out.println("Employee ID: " + Emp_id);
+        System.out.println("Designation: " + Designation);
+        System.out.println("Employee Address: " + Address);
+        System.out.println("Employee Mail ID: " + Mail_id);
+        System.out.println("Employee Mobile No: " + Mobile_no);
+        System.out.println("Basic Pay : " + bp);
+        System.out.println("DA: " + da);
+        System.out.println("HRA: " + hra);
+        System.out.println("Gross Pay: " + gp);
+        System.out.println("PF: " + pf);
+        System.out.println("Staff Club Fund: " + staff);
+        System.out.println("Net Pay : " + np);
+    }
+}
+class Programmer extends Employee {
+    Programmer() {
+        Designation = "Programmer";
+    }
+    public void programmerSalary() {
+        if (bp < 15000 || bp > 20000) {
+            System.out.println("Invalid Basic Pay!");
+            return;
+        }
+        da = bp * 97 / 100.0;
+        hra = bp * 10 / 100.0;
+        gp = bp + da + hra;
+        pf = bp * 12 / 100.0;
+        staff = bp * 1 / 100.0;
+        np = gp - (pf + staff);
+    }
+}
+class AssistantProf extends Employee {
+    AssistantProf() {
+        Designation = "Assistant Professor";
+    }
+    public void assistantprofSalary() {
+        if (bp < 20001 || bp > 30000) {
+            System.out.println("Invalid Basic Pay!");
+            return;
+        }
+        da = bp * 110 / 100.0;
+        hra = bp * 20 / 100.0;
+        gp = bp + da + hra;
+        pf = bp * 12 / 100.0;
+        staff = bp * 5 / 100.0;
+        np = gp - (pf + staff);
+    }
+}
+class Associateprof extends Employee {
+    Associateprof() {
+        Designation = "Associate Professor";
+    }
+    public void associateprofSalary() {
+        if (bp < 30001 || bp > 40000) {
+            System.out.println("Invalid Basic Pay!");
+            return;
+        }
+        da = bp * 130 / 100.0;
+        hra = bp * 30 / 100.0;
+        gp = bp + da + hra;
+        pf = bp * 12 / 100.0;
+        staff = bp * 10 / 100.0;
+        np = gp - (pf + staff);
+    }
+}
+class Professor extends Employee {
+    Professor() {
+        Designation = "Professor";
+    }
+    public void professorSalary() {
+        if (bp <= 40000) {
+            System.out.println("Invalid Basic Pay!");
+            return;
+        }
+        da = bp * 140 / 100.0;
+        hra = bp * 40 / 100.0;
+        gp = bp + da + hra;
+        pf = bp * 12 / 100.0;
+        staff = bp * 15 / 100.0;
+        np = gp - (pf + staff);
+    }
+}
+public class Salary {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int choice;
+        do {
+            System.out.println("\n----- EMPLOYEE SALARY CALCULATION -----");
+            System.out.println("1. Programmer");
+            System.out.println("2. Assistant Professor");
+            System.out.println("3. Associate Professor");
+            System.out.println("4. Professor");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+            switch (choice) {
+                case 1:
+                    Programmer p = new Programmer();
+                    p.input();
+                    p.programmerSalary();
+                    p.output();
+                    break;
+                case 2:
+                    AssistantProf ap = new AssistantProf();
+                    ap.input();
+                    ap.assistantprofSalary();
+                    ap.output();
+                    break;
+                case 3:
+                    Associateprof asp = new Associateprof();
+                    asp.input();
+                    asp.associateprofSalary();
+                    asp.output();
+                    break;
+                case 4:
+                    Professor pr = new Professor();
+                    pr.input();
+                    pr.professorSalary();
+                    pr.output();
+                    break;
+                case 5:
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid Choice!");
+            }
+        } while (choice != 5);
+        sc.close();
+    }
+}
