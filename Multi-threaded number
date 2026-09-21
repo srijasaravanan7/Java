@@ -1,0 +1,117 @@
+import java.util.*;
+
+class Number {
+    static int n;
+    static boolean available = false;
+    static boolean finished = false;
+}
+
+class NumberGenerator extends Thread {
+    public void run() {
+        Scanner sc = new Scanner(System.in);
+
+        for (int i = 0; i < 2; i++) {
+
+            synchronized (Number.class) {
+
+                System.out.print("Random Number Generated: ");
+                Number.n = sc.nextInt();
+
+                // Thread 1 displays the generated number
+                System.out.println("Thread 1: Generated Number = " + Number.n);
+
+                Number.available = true;
+                Number.class.notifyAll();
+
+                try {
+                    while (Number.available)
+                        Number.class.wait();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+
+        synchronized (Number.class) {
+            Number.finished = true;
+            Number.class.notifyAll();
+        }
+    }
+}
+
+class EvenNumber extends Thread {
+    public void run() {
+
+        while (true) {
+            synchronized (Number.class) {
+
+                try {
+                    while ((!Number.available || Number.n % 2 != 0)
+                            && !Number.finished) {
+                        Number.class.wait();
+                    }
+
+                    if (Number.finished)
+                        break;
+
+                    System.out.println("Thread 2: Square of " + Number.n
+                            + " = " + (Number.n * Number.n));
+
+                    Number.available = false;
+                    Number.class.notifyAll();
+
+                } catch (Exception e) {
+                    break;
+                }
+            }
+        }
+    }
+}
+
+class OddNumber extends Thread {
+    public void run() {
+
+        while (true) {
+            synchronized (Number.class) {
+
+                try {
+                    while ((!Number.available || Number.n % 2 == 0)
+                            && !Number.finished) {
+                        Number.class.wait();
+                    }
+
+                    if (Number.finished)
+                        break;
+
+                    System.out.println("Thread 3: Cube of " + Number.n
+                            + " = " + (Number.n * Number.n * Number.n));
+
+                    Number.available = false;
+                    Number.class.notifyAll();
+
+                } catch (Exception e) {
+                    break;
+                }
+            }
+        }
+    }
+}
+
+public class Main {
+    public static void main(String args[]) {
+
+        Thread t1 = new NumberGenerator();
+        Thread t2 = new EvenNumber();
+        Thread t3 = new OddNumber();
+
+        t1.start();
+        t2.start();
+        t3.start();
+    }
+}
